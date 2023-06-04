@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useRef, useState } from "react";
 
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
@@ -23,35 +23,33 @@ import {
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { last } from "react-stockcharts/lib/utils";
 
-class CandleStickChartWithZoomPan extends React.Component {
-	constructor(props) {
-		super(props);
-		this.saveNode = this.saveNode.bind(this);
-		this.resetYDomain = this.resetYDomain.bind(this);
-		this.handleReset = this.handleReset.bind(this);
-	}
-	componentWillMount() {
-		this.setState({
-			suffix: 1
-		});
-	}
-	saveNode(node) {
-		this.node = node;
-	}
-	resetYDomain() {
-		this.node.resetYDomain();
-	}
-	handleReset() {
-		this.setState({
-			suffix: this.state.suffix + 1
-		});
-	}
-	render() {
-		const { type, width, ratio } = this.props;
-		const { mouseMoveEvent, panEvent, zoomEvent, zoomAnchor } = this.props;
-		const { clamp } = this.props;
+const CandleStickChartWithZoomPan = (props) => {
+	const [state, setState] = useState({
+		suffix: 1
+	});
+	const saveNode = useRef(null);
+	
+	// constructor(props) {
+	// 	super(props);
+	// 	this.saveNode = this.saveNode.bind(this);
+	// 	this.resetYDomain = this.resetYDomain.bind(this);
+	// 	this.handleReset = this.handleReset.bind(this);
+	// }
 
-		const { data: initialData } = this.props;
+	
+	const resetYDomain=()=> {
+		;// this.node.resetYDomain();
+	}
+	const handleReset=()=> {
+		setState({
+			suffix: state.suffix + 1
+		});
+	}
+		const { type, width, ratio } = props;
+		const { mouseMoveEvent, panEvent, zoomEvent, zoomAnchor } = props;
+		const { clamp } = props;
+
+		const { data: initialData } = props;
 
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
@@ -78,7 +76,7 @@ class CandleStickChartWithZoomPan extends React.Component {
 		const xGrid = showGrid ? { innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.2 } : {};
 
 		return (
-			<ChartCanvas ref={this.saveNode} height={height}
+			<ChartCanvas ref={saveNode} height={height}
 				ratio={ratio}
 				width={400}
 				margin={{ left: 70, right: 70, top: 10, bottom: 30 }}
@@ -89,7 +87,7 @@ class CandleStickChartWithZoomPan extends React.Component {
 				clamp={clamp}
 				zoomAnchor={zoomAnchor}
 				type={type}
-				seriesName={`MSFT_${this.state.suffix}`}
+				seriesName={`MSFT_${state.suffix}`}
 				data={data}
 				xScale={xScale}
 				xExtents={xExtents}
@@ -119,7 +117,7 @@ class CandleStickChartWithZoomPan extends React.Component {
 					<CandlestickSeries />
 					<OHLCTooltip origin={[-40, 0]}/>
 					<ZoomButtons
-						onReset={this.handleReset}
+						onReset={handleReset}
 					/>
 				</Chart>
 				<Chart id={2}
@@ -148,7 +146,7 @@ class CandleStickChartWithZoomPan extends React.Component {
 				<CrossHairCursor />
 			</ChartCanvas>
 		);
-	}
+	
 }
 
 // CandleStickChartWithZoomPan = fitWidth(CandleStickChartWithZoomPan);

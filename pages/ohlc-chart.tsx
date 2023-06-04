@@ -26,7 +26,7 @@ export function getData() {
 }
 
 export default function OHLCChartPage() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<any>(null);
 
     useEffect(() => {
         getData().then(data => {

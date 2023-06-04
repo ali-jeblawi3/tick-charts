@@ -8,7 +8,7 @@ export function getData() {
 }
 
 export default function BarChartPage() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<any>(null);
 
     useEffect(() => {
         getData().then(data => {

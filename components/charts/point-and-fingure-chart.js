@@ -24,13 +24,10 @@ import { pointAndFigure } from "react-stockcharts/lib/indicator";
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { last } from "react-stockcharts/lib/utils";
 
-class PointAndFigure extends React.Component {
-	getChartCanvas() {
-		return this.refs.chartCanvas;
-	}
-	render() {
+const PointAndFigure=(props)=> {
+	
 		const pAndF = pointAndFigure();
-		const { type, data: initialData, width, ratio } = this.props;
+		const { type, data: initialData, width, ratio } = props;
 
 		const calculatedData = pAndF(initialData);
 		const xScaleProvider = discontinuousTimeScaleProvider
@@ -94,7 +91,7 @@ class PointAndFigure extends React.Component {
 			</ChartCanvas>
 
 		);
-	}
+	
 }
 
 // PointAndFigure = fitWidth(PointAndFigure);
