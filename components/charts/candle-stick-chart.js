@@ -80,7 +80,6 @@ const CandleStickChartWithZoomPan = (props) => {
 				ratio={100}
 				width={400}
 				margin={{ left: 70, right: 70, top: 10, bottom: 30 }}
-
 				mouseMoveEvent={mouseMoveEvent}
 				panEvent={panEvent}
 				zoomEvent={zoomEvent}
@@ -118,6 +117,7 @@ const CandleStickChartWithZoomPan = (props) => {
 					<OHLCTooltip origin={[-40, 0]}/>
 					<ZoomButtons
 						onReset={handleReset}
+						
 					/>
 				</Chart>
 				<Chart id={2}
