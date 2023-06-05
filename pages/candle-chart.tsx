@@ -39,7 +39,7 @@ export default function CandleChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             {/* <CandleStickChartWithZoomPan type={"svg"} data={data} /> */}
+             <CandleStickChartWithZoomPan type={"svg"} data={data} />
         </div>
     );
 }

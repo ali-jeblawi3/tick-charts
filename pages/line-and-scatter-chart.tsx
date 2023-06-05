@@ -39,7 +39,7 @@ export default function LineAndScatterChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* <LineAndScatterChart type={"svg"} data={data} width={400} ratio={100} /> */}
+            <LineAndScatterChart type={"svg"} data={data} width={400} ratio={100} />
         </div>
     );
 }

@@ -39,7 +39,7 @@ export default function RankoChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* <Renko type={"svg"} data={data} /> */}
+            <Renko type={"svg"} data={data} />
         </div>
     );
 }

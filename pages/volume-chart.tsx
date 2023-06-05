@@ -39,7 +39,7 @@ export default function VolumeChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* <VolumeProfileChart type={"svg"} data={data} /> */}
+            <VolumeProfileChart type={"svg"} data={data} />
         </div>
     );
 }

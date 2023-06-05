@@ -21,7 +21,7 @@ export default function BarChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* <BarChart type={"svg"} data={data} /> */}
+            <BarChart type={"svg"} data={data} />
         </div>
     );
 }

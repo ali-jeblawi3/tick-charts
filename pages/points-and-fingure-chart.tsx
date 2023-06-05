@@ -39,7 +39,7 @@ export default function PointsAndFinguresChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* <PointAndFigure type={"svg"} data={data} /> */}
+            <PointAndFigure type={"svg"} data={data} />
         </div>
     );
 }

@@ -39,7 +39,7 @@ export default function KagiChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* <Kagi type={"svg"} data={data} /> */}
+            <Kagi type={"svg"} data={data} />
             
         </div>
     );
