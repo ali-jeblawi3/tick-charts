@@ -39,7 +39,7 @@ export default function OHLCChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <OHLCChart type={"svg"} data={data} />
+            {/* <OHLCChart type={"svg"} data={data} width={400} ratio={100} /> */}
         </div>
     );
 }

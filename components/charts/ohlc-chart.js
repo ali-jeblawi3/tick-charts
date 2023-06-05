@@ -1,5 +1,6 @@
 
 import React from "react";
+import PropTypes from "prop-types";
 
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
@@ -8,8 +9,8 @@ import { ChartCanvas, Chart } from "react-stockcharts";
 import {
 	BarSeries,
 	OHLCSeries,
-	LineSeries,
-	MACDSeries,
+	ElderRaySeries,
+	StraightLine,
 } from "react-stockcharts/lib/series";
 import { XAxis, YAxis } from "react-stockcharts/lib/axes";
 import {
@@ -22,50 +23,20 @@ import {
 import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
 import {
 	OHLCTooltip,
-	MovingAverageTooltip,
-	MACDTooltip,
+	SingleValueTooltip,
 } from "react-stockcharts/lib/tooltip";
-import { ema, macd, change, elderImpulse } from "react-stockcharts/lib/indicator";
+import { change, elderRay } from "react-stockcharts/lib/indicator";
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { last } from "react-stockcharts/lib/utils";
 
-const macdAppearance = {
-	stroke: {
-		macd: "#FF0000",
-		signal: "#00F300",
-	},
-	fill: {
-		divergence: "#4682B4"
-	},
-};
-
-class OHLCChart extends React.Component {
+class OHLCChartWithElderRayIndicator extends React.Component {
 	render() {
-
+		const elder = elderRay();
 		const changeCalculator = change();
-
-		const ema12 = ema()
-			.id(1)
-			.options({ windowSize: 12 })
-			.merge((d, c) => { d.ema12 = c; })
-			.accessor(d => d.ema12);
-
-		const macdCalculator = macd()
-			.options({
-				fast: 12,
-				slow: 26,
-				signal: 9,
-			})
-			.merge((d, c) => { d.macd = c; })
-			.accessor(d => d.macd);
-
-		const elderImpulseCalculator = elderImpulse()
-			.macdSource(macdCalculator.accessor())
-			.emaSource(ema12.accessor());
 
 		const { type, data: initialData, width, ratio } = this.props;
 
-		const calculatedData = elderImpulseCalculator(macdCalculator(ema12(changeCalculator(initialData))));
+		const calculatedData = changeCalculator(elder(initialData));
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
 		const {
@@ -80,8 +51,8 @@ class OHLCChart extends React.Component {
 		const xExtents = [start, end];
 
 		return (
-			<ChartCanvas height={500}
-				width={400}
+			<ChartCanvas height={650}
+				width={width}
 				ratio={ratio}
 				margin={{ left: 70, right: 70, top: 20, bottom: 30 }}
 				type={type}
@@ -94,43 +65,28 @@ class OHLCChart extends React.Component {
 			>
 				<Chart id={1} height={300}
 					yExtents={d => [d.high, d.low]}
-					padding={{ top: 10, bottom: 10 }}
+					padding={{ top: 10, right: 0, bottom: 20, left: 0 }}
 				>
+					<YAxis axisAt="right" orient="right" ticks={5} />
 					<XAxis axisAt="bottom" orient="bottom" showTicks={false} outerTickSize={0} />
-					<YAxis axisAt="right" orient="right" ticks={2}/>
 
 					<MouseCoordinateY
 						at="right"
 						orient="right"
 						displayFormat={format(".2f")} />
 
-					<LineSeries yAccessor={ema12.accessor()} stroke={ema12.stroke()}/>
-
-					<OHLCSeries stroke={d => elderImpulseCalculator.stroke()[d.elderImpulse]} />
-
+					<OHLCSeries />
 					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
 						yAccessor={d => d.close} fill={d => d.close > d.open ? "#6BA583" : "#FF0000"}/>
 
 					<OHLCTooltip origin={[-40, -10]}/>
-					<MovingAverageTooltip
-						onClick={e => console.log(e)}
-						origin={[-38, 5]}
-						options={[
-							{
-								yAccessor: ema12.accessor(),
-								type: "EMA",
-								stroke: ema12.stroke(),
-								windowSize: ema12.options().windowSize,
-							},
-						]}
-					/>
+
 				</Chart>
 				<Chart id={2} height={150}
 					yExtents={d => d.volume}
-					origin={(w, h) => [0, h - 300]}
+					origin={(w, h) => [0, h - 450]}
 				>
 					<YAxis axisAt="left" orient="left" ticks={5} tickFormat={format(".2s")}/>
-
 					<MouseCoordinateY
 						at="left"
 						orient="left"
@@ -140,13 +96,57 @@ class OHLCChart extends React.Component {
 						fill={d => d.close > d.open ? "#6BA583" : "#FF0000"}
 						opacity={0.4}/>
 				</Chart>
-				<Chart id={3} height={150}
-					yExtents={macdCalculator.accessor()}
-					origin={(w, h) => [0, h - 150]} padding={{ top: 10, bottom: 10 }}
+				<Chart id={3} height={100}
+					yExtents={[0, elder.accessor()]}
+					origin={(w, h) => [0, h - 300]}
+					padding={{ top: 10, bottom: 10 }}
 				>
-					<XAxis axisAt="bottom" orient="bottom"/>
-					<YAxis axisAt="right" orient="right" ticks={2} />
+					<XAxis axisAt="bottom" orient="bottom" showTicks={false} outerTickSize={0} />
+					<YAxis axisAt="right" orient="right" ticks={4} tickFormat={format(".2f")}/>
 
+					<MouseCoordinateY
+						at="right"
+						orient="right"
+						displayFormat={format(".2f")} />
+
+					<ElderRaySeries yAccessor={elder.accessor()} />
+					<SingleValueTooltip
+						yAccessor={elder.accessor()}
+						yLabel="Elder Ray"
+						yDisplayFormat={d => `${format(".2f")(d.bullPower)}, ${format(".2f")(d.bearPower)}`}
+						origin={[-40, 15]}/>
+				</Chart>
+				<Chart id={4} height={100}
+					yExtents={[0, d => elder.accessor()(d) && elder.accessor()(d).bullPower]}
+					origin={(w, h) => [0, h - 200]}
+					padding={{ top: 10, bottom: 10 }}
+				>
+					<XAxis axisAt="bottom" orient="bottom" showTicks={false} outerTickSize={0} />
+					<YAxis axisAt="right" orient="right" ticks={4} tickFormat={format(".2f")}/>
+					<MouseCoordinateY
+						at="right"
+						orient="right"
+						displayFormat={format(".2f")} />
+
+					<BarSeries
+						yAccessor={d => elder.accessor()(d) && elder.accessor()(d).bullPower}
+						baseAt={(xScale, yScale, d) => yScale(0)}
+						fill="#6BA583" />
+					<StraightLine yValue={0} />
+
+					<SingleValueTooltip
+						yAccessor={d => elder.accessor()(d) && elder.accessor()(d).bullPower}
+						yLabel="Elder Ray - Bull power"
+						yDisplayFormat={format(".2f")}
+						origin={[-40, 15]}/>
+				</Chart>
+				<Chart id={5} height={100}
+					yExtents={[0, d => elder.accessor()(d) && elder.accessor()(d).bearPower]}
+					origin={(w, h) => [0, h - 100]}
+					padding={{ top: 10, bottom: 10 }}
+				>
+					<XAxis axisAt="bottom" orient="bottom" />
+					<YAxis axisAt="right" orient="right" ticks={4} tickFormat={format(".2f")}/>
 					<MouseCoordinateX
 						at="bottom"
 						orient="bottom"
@@ -155,15 +155,17 @@ class OHLCChart extends React.Component {
 						at="right"
 						orient="right"
 						displayFormat={format(".2f")} />
+					<BarSeries
+						yAccessor={d => elder.accessor()(d) && elder.accessor()(d).bearPower}
+						baseAt={(xScale, yScale, d) => yScale(0)}
+						fill="#FF0000" />
+					<StraightLine yValue={0} />
 
-					<MACDSeries yAccessor={d => d.macd}
-						{...macdAppearance} />
-					<MACDTooltip
-						origin={[-38, 15]}
-						yAccessor={d => d.macd}
-						options={macdCalculator.options()}
-						appearance={macdAppearance}
-					/>
+					<SingleValueTooltip
+						yAccessor={d => elder.accessor()(d) && elder.accessor()(d).bearPower}
+						yLabel="Elder Ray - Bear power"
+						yDisplayFormat={format(".2f")}
+						origin={[-40, 15]}/>
 				</Chart>
 				<CrossHairCursor />
 			</ChartCanvas>
@@ -171,6 +173,16 @@ class OHLCChart extends React.Component {
 	}
 }
 
-// OHLCChart = fitWidth(OHLCChart);
+OHLCChartWithElderRayIndicator.propTypes = {
+	data: PropTypes.array.isRequired,
+	width: PropTypes.number.isRequired,
+	ratio: PropTypes.number.isRequired,
+	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
+};
 
-export default OHLCChart;
+OHLCChartWithElderRayIndicator.defaultProps = {
+	type: "svg",
+};
+// OHLCChartWithElderRayIndicator = fitWidth(OHLCChartWithElderRayIndicator);
+
+export default OHLCChartWithElderRayIndicator;

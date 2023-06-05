@@ -39,7 +39,7 @@ export default function AreaChartPage() {
     }
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <AreaChart type={"svg"} data={data} />
+            {/* <AreaChart type={"svg"} data={data} /> */}
         </div>
     );
 }

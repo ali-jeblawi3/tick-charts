@@ -46,7 +46,7 @@ class Kagi extends React.Component {
 		return (
 			<ChartCanvas height={400}
 				width={400}
-				ratio={ratio}
+				ratio={100}
 				margin={{ left: 80, right: 80, top: 10, bottom: 30 }}
 				type={type}
 				seriesName="MSFT"

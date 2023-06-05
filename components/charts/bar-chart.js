@@ -14,7 +14,7 @@ class BarChart extends React.Component {
 		const data = unsortedData.slice().sort((a, b) => a.income - b.income);
 
 		return (
-			<ChartCanvas ratio={ratio}
+			<ChartCanvas ratio={100}
 				width={400}
 				height={400}
 				margin={{ left: 80, right: 10, top: 20, bottom: 30 }}

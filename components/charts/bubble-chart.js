@@ -32,7 +32,7 @@ class BubbleChart extends React.Component {
 		const fill = d => f(d.region);
 		const radius = d => r(d.population);
 		return (
-			<ChartCanvas ratio={ratio} width={width} height={400}
+			<ChartCanvas ratio={100} width={width} height={400}
 					margin={{ left: 70, right: 70, top: 20, bottom: 30 }} type={type}
 					seriesName="Wealth & Health of Nations"
 					data={data}

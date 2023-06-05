@@ -77,7 +77,7 @@ const CandleStickChartWithZoomPan = (props) => {
 
 		return (
 			<ChartCanvas ref={saveNode} height={height}
-				ratio={ratio}
+				ratio={100}
 				width={400}
 				margin={{ left: 70, right: 70, top: 10, bottom: 30 }}
 

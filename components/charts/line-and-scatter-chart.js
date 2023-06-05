@@ -1,5 +1,6 @@
 
 import React from "react";
+import PropTypes from "prop-types";
 
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
@@ -42,7 +43,7 @@ class LineAndScatterChart extends React.Component {
 			xAccessor(data[data.length - 20])
 		];
 		return (
-			<ChartCanvas ratio={ratio} width={400} height={400}
+			<ChartCanvas ratio={ratio} width={width} height={400}
 					margin={{ left: 70, right: 70, top: 20, bottom: 30 }}
 					type={type}
 					pointsPerPxThreshold={1}
@@ -103,7 +104,16 @@ class LineAndScatterChart extends React.Component {
 	}
 }
 
+LineAndScatterChart.propTypes = {
+	data: PropTypes.array.isRequired,
+	width: PropTypes.number.isRequired,
+	ratio: PropTypes.number.isRequired,
+	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
+};
 
+LineAndScatterChart.defaultProps = {
+	type: "svg",
+};
 // LineAndScatterChart = fitWidth(LineAndScatterChart);
 
 export default LineAndScatterChart;

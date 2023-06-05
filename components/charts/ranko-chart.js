@@ -46,7 +46,7 @@ class Renko extends React.Component {
 
 		return (
 			<ChartCanvas height={400}
-				ratio={ratio}
+				ratio={100}
 				width={400}
 				margin={{ left: 80, right: 80, top: 10, bottom: 30 }}
 				type={type}

@@ -28,80 +28,79 @@ const canvasGradient = createVerticalLinearGradient([
 	{ stop: 1, color: hexToRGBA("#4286f4", 0.8) },
 ]);
 
-class AreaChart extends React.Component {
-	render() {
-		const { type, data: initialData, width, ratio } = this.props;
+const AreaChart = (props) => {
+	const { type, data: initialData, width, ratio } = props;
 
-		const xScaleProvider = discontinuousTimeScaleProvider
-			.inputDateAccessor(d => d.date);
-		const {
-			data,
-			xScale,
-			xAccessor,
-			displayXAccessor,
-		} = xScaleProvider(initialData);
+	const xScaleProvider = discontinuousTimeScaleProvider
+		.inputDateAccessor(d => d.date);
+	const {
+		data,
+		xScale,
+		xAccessor,
+		displayXAccessor,
+	} = xScaleProvider(initialData);
 
-		const start = xAccessor(last(data));
-		const end = xAccessor(data[Math.max(0, data.length - 150)]);
-		const xExtents = [start, end];
-		return (
-			<ChartCanvas height={400}
-				ratio={ratio}
-				width={400}
-				margin={{ left: 45, right: 45, top: 20, bottom: 30 }}
-				type={type}
-				seriesName="MSFT"
-				data={data}
-				xScale={xScale}
-				xAccessor={xAccessor}
-				displayXAccessor={displayXAccessor}
-				xExtents={xExtents}
+	const start = xAccessor(last(data));
+	const end = xAccessor(data[Math.max(0, data.length - 150)]);
+	const xExtents = [start, end];
+	return (
+		<ChartCanvas height={400}
+			ratio={100}
+			width={400}
+			margin={{ left: 45, right: 45, top: 20, bottom: 30 }}
+			type={type}
+			seriesName="MSFT"
+			data={data}
+			xScale={xScale}
+			xAccessor={xAccessor}
+			displayXAccessor={displayXAccessor}
+			xExtents={xExtents}
+		>
+			<Chart id={1}
+				yExtents={d => [d.high, d.low]}
 			>
-				<Chart id={1}
-					yExtents={d => [d.high, d.low]}
-				>
-						<defs>
-						<linearGradient id="MyGradient" x1="0" y1="100%" x2="0" y2="0%">
-							<stop offset="0%" stopColor="#b5d0ff" stopOpacity={0.2} />
-							<stop offset="70%" stopColor="#6fa4fc" stopOpacity={0.4} />
-							<stop offset="100%"  stopColor="#4286f4" stopOpacity={0.8} />
-						</linearGradient>
-					</defs>
-					<XAxis axisAt="bottom" orient="bottom"/>
-					<YAxis axisAt="right" orient="right" ticks={5} />
+				<defs>
+					<linearGradient id="MyGradient" x1="0" y1="100%" x2="0" y2="0%">
+						<stop offset="0%" stopColor="#b5d0ff" stopOpacity={0.2} />
+						<stop offset="70%" stopColor="#6fa4fc" stopOpacity={0.4} />
+						<stop offset="100%" stopColor="#4286f4" stopOpacity={0.8} />
+					</linearGradient>
+				</defs>
+				<XAxis axisAt="bottom" orient="bottom" />
+				<YAxis axisAt="right" orient="right" ticks={5} />
 
-					<MouseCoordinateX
-						at="bottom"
-						orient="bottom"
-						displayFormat={timeFormat("%Y-%m-%d")} />
-					<MouseCoordinateY
-						at="right"
-						orient="right"
-						displayFormat={format(".2f")} />
+				<MouseCoordinateX
+					at="bottom"
+					orient="bottom"
+					displayFormat={timeFormat("%Y-%m-%d")} />
+				<MouseCoordinateY
+					at="right"
+					orient="right"
+					displayFormat={format(".2f")} />
 
-					<AreaSeries
-						yAccessor={d => d.close}
-						canvasGradient={canvasGradient}
-						fill="url(#MyGradient)"
+				<AreaSeries
+					yAccessor={d => d.close}
+					canvasGradient={canvasGradient}
+					fill="url(#MyGradient)"
 
-					/>
+				/>
 
-					<SingleValueTooltip
-						xLabel="Date" /* xLabel is optional, absence will not show the x value */
-						yLabel="C"
-						yAccessor={d => d.close}
-						xDisplayFormat={timeFormat("%Y-%m-%d")} yDisplayFormat={format(".2f")}
-						/* valueStroke="green" - optional prop */
-						/* labelStroke="#4682B4" - optional prop */
-						origin={[-40, 0]}/>
-					<SingleValueTooltip
-						yLabel="Volume" yAccessor={(d) => d.volume}
-						origin={[-40, 20]}/>
-				</Chart>
-				<CrossHairCursor />
-			</ChartCanvas>
-		);
-	}
+				<SingleValueTooltip
+					xLabel="Date" /* xLabel is optional, absence will not show the x value */
+					yLabel="C"
+					yAccessor={d => d.close}
+					xDisplayFormat={timeFormat("%Y-%m-%d")} yDisplayFormat={format(".2f")}
+					/* valueStroke="green" - optional prop */
+					/* labelStroke="#4682B4" - optional prop */
+					origin={[-40, 0]} />
+				<SingleValueTooltip
+					yLabel="Volume" yAccessor={(d) => d.volume}
+					origin={[-40, 20]} />
+			</Chart>
+			<CrossHairCursor />
+		</ChartCanvas>
+	);
+	
 }
 
 
