@@ -44,10 +44,10 @@ const AreaChart = (props) => {
 	const end = xAccessor(data[Math.max(0, data.length - 150)]);
 	const xExtents = [start, end];
 	return (
-		<ChartCanvas height={400}
+		<ChartCanvas height={375}
 			ratio={100}
-			width={400}
-			margin={{ left: 45, right: 45, top: 20, bottom: 30 }}
+			width={width}
+			margin={{ left: 45, right: 50, top: 20, bottom: 30 }}
 			type={type}
 			seriesName="MSFT"
 			data={data}
@@ -67,7 +67,7 @@ const AreaChart = (props) => {
 					</linearGradient>
 				</defs>
 				<XAxis axisAt="bottom" orient="bottom" />
-				<YAxis axisAt="right" orient="right" ticks={5} />
+				<YAxis axisAt="right" orient="right" ticks={6} />
 
 				<MouseCoordinateX
 					at="bottom"
@@ -104,6 +104,5 @@ const AreaChart = (props) => {
 }
 
 
-// AreaChart = fitWidth(AreaChart);
 
-export default AreaChart;
+export default fitWidth(AreaChart);

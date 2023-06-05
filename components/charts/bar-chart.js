@@ -15,9 +15,9 @@ class BarChart extends React.Component {
 
 		return (
 			<ChartCanvas ratio={100}
-				width={400}
+				width={width}
 				height={400}
-				margin={{ left: 80, right: 10, top: 20, bottom: 30 }}
+				margin={{ left: 40, right: 10, top: 20, bottom: 30 }}
 				type={type}
 				seriesName="Fruits"
 				xExtents={list => list.map(d => d.x)}
@@ -39,4 +39,4 @@ class BarChart extends React.Component {
 
 // BarChart = fitWidth(BarChart);
 
-export default BarChart;
+export default fitWidth(BarChart);
