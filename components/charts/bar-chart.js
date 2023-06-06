@@ -1,6 +1,7 @@
 
 import { scalePoint } from  "d3-scale";
 import React from "react";
+import PropTypes from "prop-types";
 
 import { ChartCanvas, Chart } from "react-stockcharts";
 import { BarSeries } from "react-stockcharts/lib/series";
@@ -37,6 +38,14 @@ class BarChart extends React.Component {
 	}
 }
 
-// BarChart = fitWidth(BarChart);
+BarChart.propTypes = {
+	data: PropTypes.array.isRequired,
+	width: PropTypes.number.isRequired,
+	ratio: PropTypes.number.isRequired,
+	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
+};
 
+BarChart.defaultProps = {
+	type: "svg",
+};
 export default fitWidth(BarChart);

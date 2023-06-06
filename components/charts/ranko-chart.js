@@ -3,6 +3,7 @@ import React from "react";
 
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
+import PropTypes from "prop-types";
 
 import { ChartCanvas, Chart } from "react-stockcharts";
 import {
@@ -47,7 +48,7 @@ class Renko extends React.Component {
 		return (
 			<ChartCanvas height={400}
 				ratio={100}
-				width={400}
+				width={width}
 				margin={{ left: 80, right: 80, top: 10, bottom: 30 }}
 				type={type}
 				seriesName="MSFT"
@@ -92,6 +93,14 @@ class Renko extends React.Component {
 	}
 }
 
-// Renko = fitWidth(Renko);
+Renko.propTypes = {
+	data: PropTypes.array.isRequired,
+	width: PropTypes.number.isRequired,
+	ratio: PropTypes.number.isRequired,
+	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
+};
 
-export default Renko;
+Renko.defaultProps = {
+	type: "svg",
+};
+export default fitWidth(Renko);

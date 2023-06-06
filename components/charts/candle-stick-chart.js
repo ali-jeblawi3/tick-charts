@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
+import PropTypes from "prop-types";
 
 import { ChartCanvas, Chart, ZoomButtons } from "react-stockcharts";
 import {
@@ -78,7 +79,7 @@ const CandleStickChartWithZoomPan = (props) => {
 		return (
 			<ChartCanvas ref={saveNode} height={height}
 				ratio={100}
-				width={400}
+				width={width}
 				margin={{ left: 70, right: 70, top: 10, bottom: 30 }}
 				mouseMoveEvent={mouseMoveEvent}
 				panEvent={panEvent}
@@ -149,6 +150,14 @@ const CandleStickChartWithZoomPan = (props) => {
 	
 }
 
-// CandleStickChartWithZoomPan = fitWidth(CandleStickChartWithZoomPan);
+CandleStickChartWithZoomPan.propTypes = {
+	data: PropTypes.array.isRequired,
+	width: PropTypes.number.isRequired,
+	ratio: PropTypes.number.isRequired,
+	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
+};
 
-export default CandleStickChartWithZoomPan;
+CandleStickChartWithZoomPan.defaultProps = {
+	type: "svg",
+};
+export default fitWidth(CandleStickChartWithZoomPan);

@@ -1,5 +1,6 @@
 
 import React from "react";
+import PropTypes from "prop-types";
 
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
@@ -104,5 +105,14 @@ const AreaChart = (props) => {
 }
 
 
+AreaChart.propTypes = {
+	data: PropTypes.array.isRequired,
+	width: PropTypes.number.isRequired,
+	ratio: PropTypes.number.isRequired,
+	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
+};
 
+AreaChart.defaultProps = {
+	type: "svg",
+};
 export default fitWidth(AreaChart);

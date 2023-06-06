@@ -183,6 +183,5 @@ OHLCChartWithElderRayIndicator.propTypes = {
 OHLCChartWithElderRayIndicator.defaultProps = {
 	type: "svg",
 };
-// OHLCChartWithElderRayIndicator = fitWidth(OHLCChartWithElderRayIndicator);
 
-export default OHLCChartWithElderRayIndicator;
+export default fitWidth(OHLCChartWithElderRayIndicator);

@@ -3,6 +3,7 @@ import React from "react";
 
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
+import PropTypes from "prop-types";
 
 import { ChartCanvas, Chart } from "react-stockcharts";
 import {
@@ -46,7 +47,7 @@ const PointAndFigure=(props)=> {
 		return (
 			<ChartCanvas height={400}
 				ratio={100}
-				width={400}
+				width={width}
 				margin={{ left: 80, right: 80, top: 10, bottom: 30 }}
 				type={type}
 				seriesName="MSFT"
@@ -94,6 +95,15 @@ const PointAndFigure=(props)=> {
 	
 }
 
-// PointAndFigure = fitWidth(PointAndFigure);
+PointAndFigure.propTypes = {
+	data: PropTypes.array.isRequired,
+	width: PropTypes.number.isRequired,
+	ratio: PropTypes.number.isRequired,
+	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
+};
 
-export default PointAndFigure;
+PointAndFigure.defaultProps = {
+	type: "svg",
+};
+
+export default fitWidth(PointAndFigure);
