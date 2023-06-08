@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CandleStickChartWithZoomPan from '../components/charts/candle-stick-chart';
 import { tsvParse } from "d3-dsv";
 import { timeParse } from "d3-time-format";
+import { useRouter } from 'next/router';
 
 function parseData(parse:any) {
 	return function(d:any) {
@@ -27,7 +28,8 @@ export function getData() {
 
 export default function CandleChartPage() {
     const [data, setData] = useState<any>(null);
-
+	const { query } = useRouter();
+    const { lang, theme, heigth } = query;
     useEffect(() => {
         getData().then(data => {
             setData(data);
@@ -38,7 +40,11 @@ export default function CandleChartPage() {
         return <div><h2>Loading...</h2></div>
     }
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{
+            display: 'flex',
+            background:theme==='dark' ? '#1f1f1f':'#fff',
+            alignItems: 'center', justifyContent: 'center'
+        }}>
              <CandleStickChartWithZoomPan type={"svg"} data={data} />
         </div>
     );

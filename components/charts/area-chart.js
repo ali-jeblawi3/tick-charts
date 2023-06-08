@@ -22,6 +22,7 @@ import { SingleValueTooltip } from "react-stockcharts/lib/tooltip";
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { hexToRGBA, last } from "react-stockcharts/lib/utils";
 import { createVerticalLinearGradient } from "react-stockcharts/lib/utils";
+import { useRouter } from "next/router";
 
 const canvasGradient = createVerticalLinearGradient([
 	{ stop: 0, color: hexToRGBA("#b5d0ff", 0.2) },
@@ -31,6 +32,8 @@ const canvasGradient = createVerticalLinearGradient([
 
 const AreaChart = (props) => {
 	const { type, data: initialData, width, ratio } = props;
+	const { query } = useRouter();
+	const { lang, theme, heigth } = query;
 
 	const xScaleProvider = discontinuousTimeScaleProvider
 		.inputDateAccessor(d => d.date);
@@ -45,8 +48,10 @@ const AreaChart = (props) => {
 	const end = xAccessor(data[Math.max(0, data.length - 150)]);
 	const xExtents = [start, end];
 	return (
-		<ChartCanvas height={375}
-			ratio={100}
+		<div className="dark">
+		<ChartCanvas height={heigth ? heigth :375}
+				ratio={100}
+				
 			width={width}
 			margin={{ left: 45, right: 50, top: 20, bottom: 30 }}
 			type={type}
@@ -67,7 +72,7 @@ const AreaChart = (props) => {
 						<stop offset="100%" stopColor="#4286f4" stopOpacity={0.8} />
 					</linearGradient>
 				</defs>
-				<XAxis axisAt="bottom" orient="bottom" />
+				<XAxis  axisAt="bottom" orient="bottom" />
 				<YAxis axisAt="right" orient="right" ticks={6} />
 
 				<MouseCoordinateX
@@ -99,7 +104,8 @@ const AreaChart = (props) => {
 					origin={[-40, 20]} />
 			</Chart>
 			<CrossHairCursor />
-		</ChartCanvas>
+			</ChartCanvas>
+			</div>
 	);
 	
 }

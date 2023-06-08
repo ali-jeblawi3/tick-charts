@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import VolumeProfileChart from '../components/charts/volume-profile-chart';
 import { tsvParse } from "d3-dsv";
 import { timeParse } from "d3-time-format";
+import { useRouter } from 'next/router';
 
 function parseData(parse:any) {
 	return function(d:any) {
@@ -27,7 +28,8 @@ export function getData() {
 
 export default function VolumeChartPage() {
     const [data, setData] = useState<any>(null);
-
+	const { query } = useRouter();
+    const { lang, theme, heigth } = query;
     useEffect(() => {
         getData().then(data => {
             setData(data);
@@ -38,7 +40,11 @@ export default function VolumeChartPage() {
         return <div><h2>Loading...</h2></div>
     }
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{
+            display: 'flex',
+                    background:theme==='dark' ? '#1f1f1f':'#fff',
+    alignItems: 'center', justifyContent: 'center'
+        }}>
             <VolumeProfileChart type={"svg"} data={data} />
         </div>
     );
